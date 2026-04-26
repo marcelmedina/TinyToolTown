@@ -25,6 +25,9 @@ for (const [slug, repo] of repoMap) {
   toolStars.set(slug, starCounts.get(repo) || 0);
 }
 
+// Tags with a count above this threshold are highlighted as "hot"
+const HOT_TAG_THRESHOLD = 10;
+
 // Count tag frequency and split into popular (3+) and rest
 const tagCounts = new Map<string, number>();
 tools.forEach(t => t.data.tags.forEach(tag => {
@@ -73,7 +76,7 @@ const moreTags = [...tagCounts.entries()]
       <div class="tags-filter" id="tags-filter">
         <button class="tag-btn active" data-tag="all">All</button>
         {popularTags.map(tag => (
-          <button class="tag-btn" data-tag={tag}>{tag} <span class="tag-count">{tagCounts.get(tag)}</span></button>
+          <button class:list={['tag-btn', { hot: (tagCounts.get(tag) ?? 0) > HOT_TAG_THRESHOLD }]} data-tag={tag}>{tag} <span class="tag-count">{tagCounts.get(tag)}</span></button>
         ))}
         {moreTags.length > 0 && (
           <button class="tag-btn more-tags-toggle" id="more-tags-toggle">More ▾</button>
@@ -563,6 +566,25 @@ const moreTags = [...tagCounts.entries()]
 
   .tag-btn.active .tag-count {
     opacity: 0.8;
+  }
+
+  .tag-btn.hot {
+    background: var(--color-hot-bg, #ffd700);
+    border-color: var(--color-hot-border, #e6b800);
+    color: var(--color-hot-text, #3a2c00);
+    font-weight: 600;
+  }
+
+  .tag-btn.hot:hover {
+    background: var(--color-hot-bg-hover, #ffec6e);
+    border-color: var(--color-hot-border, #e6b800);
+    color: var(--color-hot-text, #3a2c00);
+  }
+
+  .tag-btn.hot.active {
+    background: var(--color-hot-border, #e6b800);
+    border-color: var(--color-hot-border-active, #c9a200);
+    color: var(--color-hot-text, #3a2c00);
   }
 
   .more-tags-toggle {
