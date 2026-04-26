@@ -73,14 +73,14 @@ const moreTags = [...tagCounts.entries()]
       <div class="tags-filter" id="tags-filter">
         <button class="tag-btn active" data-tag="all">All</button>
         {popularTags.map(tag => (
-          <button class="tag-btn" data-tag={tag}>{tag} <span class="tag-count">{tagCounts.get(tag)}</span></button>
+          <button class:list={["tag-btn", { "tag-btn--hot": (tagCounts.get(tag) ?? 0) > 10 }]} data-tag={tag}>{tag} <span class="tag-count">{tagCounts.get(tag)}</span></button>
         ))}
         {moreTags.length > 0 && (
           <button class="tag-btn more-tags-toggle" id="more-tags-toggle">More ▾</button>
         )}
         <div class="more-tags" id="more-tags" style="display: none;">
           {moreTags.map(tag => (
-            <button class="tag-btn" data-tag={tag}>{tag}</button>
+            <button class:list={["tag-btn", { "tag-btn--hot": (tagCounts.get(tag) ?? 0) > 10 }]} data-tag={tag}>{tag}</button>
           ))}
         </div>
       </div>
@@ -563,6 +563,39 @@ const moreTags = [...tagCounts.entries()]
 
   .tag-btn.active .tag-count {
     opacity: 0.8;
+  }
+
+  .tag-btn--hot {
+    border-color: rgba(250, 204, 21, 0.55);
+    color: #ca8a04;
+  }
+
+  .tag-btn--hot .tag-count {
+    color: #ca8a04;
+    opacity: 0.9;
+  }
+
+  .tag-btn--hot:hover,
+  .tag-btn--hot.active {
+    background: #facc15;
+    border-color: #facc15;
+    color: #1a1a00;
+  }
+
+  .tag-btn--hot.active .tag-count {
+    color: #1a1a00;
+  }
+
+  [data-theme="light"] .tag-btn--hot {
+    border-color: rgba(161, 98, 7, 0.45);
+    color: #92400e;
+  }
+
+  [data-theme="light"] .tag-btn--hot:hover,
+  [data-theme="light"] .tag-btn--hot.active {
+    background: #fbbf24;
+    border-color: #fbbf24;
+    color: #1c1400;
   }
 
   .more-tags-toggle {
